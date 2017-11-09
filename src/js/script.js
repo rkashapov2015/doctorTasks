@@ -30,11 +30,11 @@ function createInput(name, type, className, id) {
     return input;
 }
 
-function createTask(task_id, typeDoctor, polis, priority, description) {
+function createTask(task_id, typeDoctor, userData, priority, description) {
     const wrapper = createEl('div', 'doctor-task');
     wrapper.dataset.id = task_id;
     var classPriority = 'normal';
-
+    
     switch(priority) {
         case 'low':
         classPriority = 'priority-low';
@@ -48,4 +48,6 @@ function createTask(task_id, typeDoctor, polis, priority, description) {
     wrapper.appendChild(doctorPolis);
 
     wrapper.classList.add(classPriority);
+
+    return wrapper;
 }

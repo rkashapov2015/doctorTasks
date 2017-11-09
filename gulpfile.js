@@ -14,9 +14,7 @@ var babel = require('gulp-babel');
 
 gulp.task('js', function() {
     return gulp.src('src/js/*.js')
-        .pipe(babel({
-            presets: ['env']
-        }))
+        .pipe(babel())
         .pipe(minify({
             ext:{
                 src:'.js',
