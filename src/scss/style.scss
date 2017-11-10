@@ -1,4 +1,143 @@
+$red: rgba(255,10,0,0.6);
+$blue: rgba(0,100,255,0.6);
+$green: rgba(0,255,100,0.6);
+$yellow: rgba(255, 234, 0, 0.6);
+$widthAngle: 100px;
+
+.doctor-task-list {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 500px;
+    box-sizing: border-box;
+}
 .doctor-task {
-    padding: 5px;
+    padding: 0px;
     border-radius: 5px;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 5px 0;
+    box-shadow: inset 0 0 50px #fff;
+    animation: done 0.5s;
+}
+.prof-terapevt {
+    background: #ccccff;
+    box-shadow: 0 5px 2px rgba(0,0,255,0.1);
+}
+.prof-pediatr {
+    background: #ccffcc;
+    box-shadow: 0 5px 2px rgba(0,255,0,0.1);
+}
+.prof-special {
+    background: #ffcccc;
+    box-shadow: 0 5px 2px rgba(255,0,0,0.1);
+}
+
+.doctor-task-wrapper {
+    padding: 10px 10px 10px 10px;
+    box-sizing: border-box;
+    float: left;
+    width: 90%;
+}
+.doctor-task-wrapper hr {
+    border-color: #fff;
+}
+.priority-low .doctor-task-wrapper::before, 
+.priority-normal .doctor-task-wrapper::before,
+.priority-high .doctor-task-wrapper::before, 
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-right: $widthAngle solid transparent;
+    border-bottom: $widthAngle solid transparent;
+    clear: both;
+    
+}
+.priority-high {
+    border: 1px solid #900;
+}
+.priority-high .doctor-task-fullname {
+    color: #fff;
+}
+.priority-low .doctor-task-wrapper::before {
+    border-left: $widthAngle solid $blue;
+    border-top: $widthAngle solid $blue;
+}
+
+.priority-normal .doctor-task-wrapper::before {
+    border-left: $widthAngle solid $yellow;
+    border-top: $widthAngle solid $yellow;
+}
+
+.priority-high .doctor-task-wrapper::before {
+    border-left: $widthAngle solid $red;
+    border-top: $widthAngle solid $red;
+}
+.doctor-task-container {
+    position: relative;
+    float: left;
+    //width: 400px;
+    margin-right: 10px;
+}
+
+.doctor-task-polis, .doctor-task-phone {
+    width: 50%;
+    //display: inline-block;
+    float: left;
+    
+}
+.doctor-task-polis {
+    padding: 2px;
+    //border: 1px solid #555;
+    border: none;
+    background: #fff;
+    box-shadow: 2px 2px 0px #555;
+}
+.doctor-task-phone {
+    text-align: right;    
+}
+.doctor-task-fullname {
+    display: inline-block;
+    width: 100%;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.doctor-task-comment {
+    display: inline-block;
+    font-size: 12px;
+    padding: 5px 0;
+    font-style: italic;
+}
+
+.doctor-task-buttons {
+    float: left;
+    width: 10%;
+}
+.doctor-btn {
+    float: left;
+    width: 100%;
+    border: none;
+    transition: all 0.2s;
+    background: rgba(200,200,200,0.9);
+}
+.doctor-btn:hover {
+    background: rgba(250,100,100,0.9);
+    color: #fff;
+}
+
+@keyframes done {
+    0% {
+        opacity: 0;
+        background-color: rgba(255, 255, 255, .6);
+        transform: scale(1.1);
+    }
+    50% {
+        opacity: 1;
+        background-color: rgba(182, 224, 184, .8);
+    }
 }
