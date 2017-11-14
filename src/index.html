@@ -8,41 +8,14 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
-        <div id="taskList" class="doctor-task-list">
-            <div class="doctor-task priority-normal prof-pediatr" data-id="1">
-                <div class="doctor-task-wrapper">
-                    <div class="doctor-task-container">
-                        <div class="doctor-task-polis">0000000000</div>
-                        <div class="doctor-task-phone">79999999999</div>
-                        <div class="doctor-task-fullname">Иван Иванов</div>
-                        <div class="doctor-task-comment">Роза Андреевна Лениногорск пробный звонок от агента-для терапевта</div>
-                    </div>
-                    <div class="doctor-task-buttons"></div>
-                </div>
+        <div class="doctor-tasks-wrapper">
+            <div class="doctor-task-block">
+                <span class="doctor-task-block-label">Общие задачи</span>
+                <div id="taskList" class="doctor-task-list"></div>
             </div>
-            <div class="doctor-task priority-high prof-terapevt" data-id="1">
-                <div class="doctor-task-wrapper">
-                    <div class="doctor-task-container">
-                        <div class="doctor-task-polis">0000000000</div>
-                        <div class="doctor-task-phone">79999999999</div>
-                        <div class="doctor-task-fullname">Иван Иванов</div>
-                        <div class="doctor-task-comment">Шла Саша по шоссе и сосала сушку</div>
-                    </div>
-                    <div class="doctor-task-buttons"></div>
-                </div>
-            </div>
-            <div class="doctor-task priority-low prof-pediatr" data-id="1">
-                <div class="doctor-task-wrapper">
-                    <div class="doctor-task-container">
-                        <div class="doctor-task-polis">0000000000</div>
-                        <div class="doctor-task-phone">79999999999</div>
-                        <div class="doctor-task-fullname">Иван Иванов</div>
-                        <div class="doctor-task-comment">Роза Андреевна Лениногорск пробный звонок от агента-для терапевта</div>
-                    </div>
-                </div>
-                <div class="doctor-task-buttons">
-                    <button data-oper="" class="doctor-btn"><i class="fa fa-hand-lizard-o" aria-hidden="true"></i></button>
-                </div>
+            <div class="doctor-task-block">
+                <span class="doctor-task-block-label">Мои задачи</span>
+                <div id="myTasks" class="my-task-list"></div>
             </div>
         </div>
         <script src="js/script.js"></script>

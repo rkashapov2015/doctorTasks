@@ -2,13 +2,54 @@ $red: rgba(255,10,0,0.6);
 $blue: rgba(0,100,255,0.6);
 $green: rgba(0,255,100,0.6);
 $yellow: rgba(255, 234, 0, 0.6);
+
+$colorBorderTaskBlock: #ccccff;
+
 $widthAngle: 100px;
 
 .doctor-task-list {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 500px;
+    //width: 500px;
     box-sizing: border-box;
 }
+
+.doctor-task-block {
+    padding: 0 5px 5px 5px;
+    margin: 5px;
+    border: 2px solid $colorBorderTaskBlock;
+    border-radius: 5px;
+    position: relative;
+}
+.doctor-task-block-label {
+    margin-left: 15px;
+    padding: 4px 10px;
+    background: $colorBorderTaskBlock;
+    position: relative;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.doctor-task-block-label:before, .doctor-task-block-label:after {
+    position: absolute;
+    top: 0;
+    content: '';
+    width: 0;
+    height: 0;
+}
+.doctor-task-block-label:before {
+    left: -9px;
+    border-right: 5px solid $colorBorderTaskBlock;
+    border-top: 5px solid $colorBorderTaskBlock;
+    border-left: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+.doctor-task-block-label:after {
+    right: -10px;
+    border-left: 10px solid $colorBorderTaskBlock;
+    border-top: 10px solid $colorBorderTaskBlock;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
 .doctor-task {
     padding: 0px;
     border-radius: 5px;
@@ -27,6 +68,22 @@ $widthAngle: 100px;
 .prof-pediatr {
     background: #ccffcc;
     box-shadow: 0 5px 2px rgba(0,255,0,0.1);
+}
+.prof-pediatr .doctor-task-wrapper:after, .prof-terapevt .doctor-task-wrapper:after {
+    position: absolute;
+    right: 0;
+    bottom: -30px;
+    font-family: FontAwesome;
+    font-size: 120px;
+    color: rgba(0,0,0,0.1);
+    z-index: 2;
+}
+.prof-terapevt .doctor-task-wrapper:after {
+    content: "\f0f1";
+    
+}
+.prof-pediatr .doctor-task-wrapper:after {
+    content: "\f1ae";
 }
 .prof-special {
     background: #ffcccc;
@@ -82,6 +139,7 @@ $widthAngle: 100px;
     float: left;
     //width: 400px;
     margin-right: 10px;
+    z-index: 3;
 }
 
 .doctor-task-polis, .doctor-task-phone {
@@ -117,6 +175,8 @@ $widthAngle: 100px;
 .doctor-task-buttons {
     float: left;
     width: 10%;
+    z-index: 3;
+    position: relative;
 }
 .doctor-btn {
     float: left;
