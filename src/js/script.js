@@ -3,12 +3,23 @@
 const mainWrapper = document.querySelector('.doctor-tasks-wrapper');
 const taskList = document.getElementById('taskList');
 const myTasks = document.getElementById('myTasks');
+const modalDoctorTask = document.getElementById('modalDoctorTask');
 
 const urlWebsocket = 'ws://medportal:5060';
+const typesDoctor = {
+    terapevt: 'Терапевт',
+    pediatr: 'Педиатр'
+};
+const prioritys = {
+    low: 'Низкий',
+    normal: 'Нормальный',
+    high: 'Высокий'
+}
 
 let connection = null;
 let userId = 978;
 let hash = 'QZFWnPWSysImhryYAofuW5asHSxXe6ZN';
+
 
 let taskData = [];
 
@@ -45,7 +56,9 @@ const webSocketObject = {
     },
     onClose: (event) => {
         if (event.wasClean) {
-            
+            console.log('Соединение закрыто корректно');
+        } else {
+            console.log(event.code);
         }
         webSocketObject.tryConnect++;
         if (webSocketObject.tryConnect > 5) {
@@ -65,6 +78,7 @@ const webSocketObject = {
     }
 };
 
+///begin
 init();
 
 function createEl(type, className, id) {
@@ -192,6 +206,88 @@ function drawTasks() {
     }
 }
 
+function createField(labelText, inputNode, classWrapper) {
+    const div = createEl('div', classWrapper);
+    const label = createEl('label');
+    label.innerText = labelText;
+    div.appendChild(label);
+    div.appendChild(inputNode);
+    return div;
+}
+function createSelectAA(object, className, defaultValue) {
+    const select = createEl('select', className);
+    Object.keys(object).forEach((indexType) => {
+        const option = createEl('option');
+        option.setAttribute('value', indexType);
+        option.innerText = object[indexType];
+        if (defaultValue === indexType) {
+            option.setAttribute('selected', '');
+        }
+        select.appendChild(option);
+    });
+    return select;
+}
+
+function showModalNewTask() {
+    const fragment = document.createDocumentFragment();
+
+    const selectType = createSelectAA(typesDoctor, 'form-control');
+    selectType.setAttribute('id', 'newTask_typeDoctor');
+    fragment.appendChild(createField('Направление', selectType, 'form-group'));
+
+    const selectPriority = createSelectAA(prioritys, 'form-control', 'normal');
+    selectPriority.setAttribute('id', 'newTask_priority');
+    fragment.appendChild(createField('Приоритет', selectPriority, 'form-group'));
+    
+    const inputPolis = createEl('input', 'form-control');
+    inputPolis.setAttribute('id', 'newTask_polis');
+    fragment.appendChild(createField('Полис', inputPolis, 'form-group'));
+    
+    const inputFullname = createEl('input', 'form-control');
+    inputFullname.setAttribute('id', 'newTask_fullname');
+    fragment.appendChild(createField('Имя Фамилия', inputFullname, 'form-group'));
+    
+    const inputPhone = createEl('input', 'form-control');
+    inputPhone.setAttribute('id', 'newTask_phone');
+    inputPhone.setAttribute('type', 'number');
+    fragment.appendChild(createField('Телефон', inputPhone, 'form-group'));
+
+    const textComment = createEl('textarea', 'form-control');     
+    textComment.setAttribute('id', 'newTask_comment');
+    fragment.appendChild(createField('Комментарий', textComment, 'form-group'));
+    
+    const buttonSubmit = createEl('button', 'btn btn-success btn-block');
+    buttonSubmit.dataset.operation = 'new-task';
+    buttonSubmit.innerText = 'Создать';
+    fragment.appendChild(buttonSubmit);
+
+    drawModal('Новая задача', fragment);
+    showModal();
+}
+
+
+
+function drawModal(headerText, bodyElements) {
+    clearNode(modalDoctorTask);
+    //<div class="modal-doctor-header">Заголовок</div>
+    //<div class="modal-doctor-body">Тело</div>
+    const header = createEl('div', 'modal-doctor-header');
+    const body = createEl('div', 'modal-doctor-body');
+    const h3 = createEl('h3');
+    h3.innerText = headerText;
+    header.appendChild(h3);
+    
+    body.appendChild(bodyElements);
+    modalDoctorTask.appendChild(header);
+    modalDoctorTask.appendChild(body);
+}
+function showModal() {
+    modalDoctorTask.classList.add('show');
+}
+function hideModal() {
+    modalDoctorTask.classList.remove('show');
+}
+
 function init() {
     
     clearNode(taskList);
@@ -282,8 +378,9 @@ function changeTask(object) {
             if (value.id == task.id) {
                 console.log('task #: ' + value.id)
                 taskData[indexTask] = value;
-                const elementCommon = taskList.querySelector('div[data-id="' + task.id + '"]');
+                /*const elementCommon = taskList.querySelector('div[data-id="' + task.id + '"]');
                 const elementMy = myTasks.querySelector('div[data-id="' + task.id + '"]');
+
                 if (!elementCommon && !elementMy) {
                     const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
                     if (parseInt(value.responsible) === userId) {
@@ -298,8 +395,8 @@ function changeTask(object) {
                         if (parseInt(value.responsible) === userId) {
                             console.log('getTask');
                             getTask(changeButtonsForMyList(elementCommon));
-                        } else if(task.responsible) {
-                            console.log('Remove Task');
+                        } else if(parseInt(task.responsible)) {
+                            console.log('Remove Task' + parseInt(task.responsible));
                             taskList.removeChild(elementCommon);
                         }
                     }
@@ -313,12 +410,12 @@ function changeTask(object) {
     
                         }
                     }
-                }
+                }*/
             }
         });
     });
-    //clearAll();
-    //drawTasks();
+    clearAll();
+    drawTasks();
     
 }
 
@@ -377,11 +474,17 @@ function getParentByClassName(object, className) {
          return false;
     }
     let currentLevel = object;
+    console.log(currentLevel.parentNode);
     while (currentLevel.parentNode) {
-        if (currentLevel.parentNode.classList.contains(className)) {
-            return currentLevel.parentNode;
+        try {
+            if (currentLevel.parentNode.classList.contains(className)) {
+                return currentLevel.parentNode;
+            }
+            currentLevel = currentLevel.parentNode;
         }
-        currentLevel = currentLevel.parentNode;
+        catch (error) {
+            return false;
+        }
     }
     return false;
 }
@@ -414,12 +517,14 @@ function clickHandler(event) {
         return false;
     }
     console.log(button.dataset.operation);
-    const parent = getParentByClassName(button, 'doctor-task');
-
-    if (!parent) {
+    let params = {'c': null, 'd': null};
+    
+    let parent = getParentByClassName(button, 'doctor-task');
+    
+    if (!parent && button.dataset.operation !== 'new-task') {
         return false;
     }
-    let params = {'c': null, 'd': null};
+    
     switch (button.dataset.operation) {
         case 'catch-task':
             params.c = 'catchTask';
@@ -428,6 +533,13 @@ function clickHandler(event) {
             
             //let taskNode = getParentByClassName(event.target, 'doctor-task');
             //getTask(taskNode);
+        break;
+        case 'new-task':
+            params.c = 'newTask';
+            params.d = readModalFormData();
+            //button.setAttribute('disabled','');
+            console.log(params.d);
+            //return false;
         break;
         case 'throw-task':
             params.c = 'throwTask';
@@ -438,6 +550,32 @@ function clickHandler(event) {
             params.d = parent.dataset.id;
         break;
     }
+    
     webSocketObject.send(JSON.stringify(params));
 }
 
+function readModalFormData() {
+    const params = ['responsible', 'typeDoctor', 'priority', 'comment'];
+    const userDataParams = ['phone', 'polis', 'fullname'];
+    let object = {};
+    let userData = {};
+    const elements = modalDoctorTask.querySelectorAll('input, select, textarea');
+    Array.from(elements).forEach((element) => {
+        let id = element.id;
+        id = id.replace(/newTask_/i, '');
+        console.log(id + ' ' + element.value);
+        if (params.indexOf(id)) {
+            object[id] = element.value;
+        }
+        if (userDataParams.indexOf(id)) {
+            userData[id] = element.value;
+        }
+        
+    });
+    
+    object['userData'] = JSON.stringify(userData);
+    if (!object.hasOwnProperty('responsible')) {
+        object['responsible'] = null;
+    }
+    return object;
+}

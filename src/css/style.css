@@ -46,8 +46,7 @@
   overflow: hidden;
   box-sizing: border-box;
   margin: 5px 0;
-  box-shadow: inset 0 0 50px #fff;
-  animation: done 0.5s; }
+  box-shadow: inset 0 0 50px #fff; }
 
 .prof-terapevt {
   background: #ccccff;
@@ -163,6 +162,20 @@
 .doctor-btn:hover {
   background: rgba(250, 100, 100, 0.9);
   color: #fff; }
+
+.modal-doctor-task {
+  position: fixed;
+  display: none;
+  width: 400px;
+  bottom: 10%;
+  left: 10%;
+  right: 10%;
+  background: #fefefe;
+  z-index: 100;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px #000;
+  animation: done 0.5s; }
 
 @keyframes done {
   0% {
