@@ -158,6 +158,25 @@ function createTask(task_id, typeDoctor, userData, priority, description) {
     return doctorTaskBlock;
 }
 
+function changeButtonsForMyList(taskBlock) {
+    const buttonBlock = taskBlock.querySelector('.doctor-task-buttons');
+    if (buttonBlock) {
+        clearNode(buttonBlock);
+        const buttonThrow = createEl('button', 'doctor-btn');
+        buttonThrow.dataset.operation = 'throw-task';
+        const iGarbage  = createEl('i', 'fa fa-trash-o');
+        buttonThrow.appendChild(iGarbage);
+        buttonBlock.appendChild(buttonThrow);
+
+        const buttonEnd = createEl('button', 'doctor-btn');
+        buttonEnd.dataset.operation = 'end-task';
+        const iCheck = createEl('i', 'fa fa-check');
+        buttonEnd.appendChild(iCheck);
+        buttonBlock.appendChild(buttonEnd);
+    }
+    return taskBlock;
+}
+
 function drawTasks() {
     for(let object of taskData) {
         console.log(object.responsible);
@@ -167,22 +186,7 @@ function drawTasks() {
         } 
 
         if (object.responsible == userId) {
-            const buttonBlock = taskBlock.querySelector('.doctor-task-buttons');
-            if (buttonBlock) {
-                clearNode(buttonBlock);
-                const buttonThrow = createEl('button', 'doctor-btn');
-                buttonThrow.dataset.operation = 'throw-task';
-                const iGarbage  = createEl('i', 'fa fa-trash-o');
-                buttonThrow.appendChild(iGarbage);
-                buttonBlock.appendChild(buttonThrow);
-
-                const buttonEnd = createEl('button', 'doctor-btn');
-                buttonEnd.dataset.operation = 'end-task';
-                const iCheck = createEl('i', 'fa fa-check');
-                buttonEnd.appendChild(iCheck);
-                buttonBlock.appendChild(buttonEnd);
-            }
-            myTasks.appendChild(taskBlock);
+            myTasks.appendChild(changeButtonsForMyList(taskBlock));
         }
         
     }
@@ -228,7 +232,7 @@ function sendData(url, data) {
 function readInstruction(data) {
     let object = getJsonData(data);
     
-    clearAll();
+    //clearAll();
     if (object.hasOwnProperty('c')) {
         switch(object.c) {
             case 'init':
@@ -274,13 +278,46 @@ function changeTask(object) {
         let userData = getJsonData(value.userData);
         value.userData = userData;
         taskData.forEach((task, indexTask) => {
-            if (value.id ==  task.id) {
+            if (value.id == task.id) {
+                console.log('task #: ' + value.id)
                 taskData[indexTask] = value;
+                const elementCommon = taskList.querySelector('div[data-id="' + task.id + '"]');
+                const elementMy = myTasks.querySelector('div[data-id="' + task.id + '"]');
+                if (elementCommon) {
+                    console.log('task in common list');
+                    console.log(elementCommon);
+                    if (parseInt(value.responsible) === userId) {
+                        console.log('getTask');
+                        getTask(changeButtonsForMyList(elementCommon));
+                    } else if(task.responsible) {
+                        console.log('Remove Task');
+                        taskList.removeChild(elementCommon);
+                    }
+                } else {
+                    console.log('task not in common list');
+                    if (task.responsible === userId) {
+                        
+                    }
+                }
+                if (elementMy) {
+                    console.log('in my list');
+                    if (parseInt(task.responsible) === userId) {
+                        const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
+                        taskList.appendChild(taskBlock);
+                        myTasks.removeChild(elementMy);
+                    } else {
+
+                    }
+                } else {
+
+                }
+                
             }
         });
     });
-    clearAll();
-    drawTasks();
+    //clearAll();
+    //drawTasks();
+    
 }
 
 function readError(object) {
@@ -349,9 +386,9 @@ function getParentByClassName(object, className) {
 
 function getTask(taskNode) {
     if (!taskNode) {
+        console.log('getTask taskNode not found');
         return false;
     }
-    
     console.log(taskNode);
     let cloneTask = taskNode.cloneNode(true);
     taskNode.parentNode.removeChild(taskNode);
