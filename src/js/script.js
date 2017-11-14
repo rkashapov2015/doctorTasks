@@ -259,6 +259,7 @@ function readInstruction(data) {
     
 }
 function initTasks(object) {
+    clearAll();
     if (object.hasOwnProperty('tasks')) {
         Array.from(object.tasks).forEach((value)=>{
             let userData = getJsonData(value.userData);
@@ -293,11 +294,6 @@ function changeTask(object) {
                         console.log('Remove Task');
                         taskList.removeChild(elementCommon);
                     }
-                } else {
-                    console.log('task not in common list');
-                    if (task.responsible === userId) {
-                        
-                    }
                 }
                 if (elementMy) {
                     console.log('in my list');
@@ -308,8 +304,15 @@ function changeTask(object) {
                     } else {
 
                     }
-                } else {
+                }
 
+                if (!elementCommon && !elementMy) {
+                    const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
+                    if (parseInt(value.responsible) === userId) {
+                        myTasks.appendChild(changeButtonsForMyList(taskBlock));
+                    } else {
+                        taskList.appendChild(taskBlock);
+                    }
                 }
                 
             }
