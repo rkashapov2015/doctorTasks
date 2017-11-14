@@ -8,7 +8,7 @@ const urlWebsocket = 'ws://medportal:5060';
 
 let connection = null;
 let userId = 978;
-let hash = 'WPwMg_ugZzaQ5oZnKUiBvMhKFv0uqFVi';
+let hash = 'QZFWnPWSysImhryYAofuW5asHSxXe6ZN';
 
 let taskData = [];
 
@@ -284,28 +284,6 @@ function changeTask(object) {
                 taskData[indexTask] = value;
                 const elementCommon = taskList.querySelector('div[data-id="' + task.id + '"]');
                 const elementMy = myTasks.querySelector('div[data-id="' + task.id + '"]');
-                if (elementCommon) {
-                    console.log('task in common list');
-                    console.log(elementCommon);
-                    if (parseInt(value.responsible) === userId) {
-                        console.log('getTask');
-                        getTask(changeButtonsForMyList(elementCommon));
-                    } else if(task.responsible) {
-                        console.log('Remove Task');
-                        taskList.removeChild(elementCommon);
-                    }
-                }
-                if (elementMy) {
-                    console.log('in my list');
-                    if (parseInt(task.responsible) === userId) {
-                        const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
-                        taskList.appendChild(taskBlock);
-                        myTasks.removeChild(elementMy);
-                    } else {
-
-                    }
-                }
-
                 if (!elementCommon && !elementMy) {
                     const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
                     if (parseInt(value.responsible) === userId) {
@@ -313,8 +291,29 @@ function changeTask(object) {
                     } else {
                         taskList.appendChild(taskBlock);
                     }
+                } else {
+                    if (elementCommon) {
+                        console.log('task in common list');
+                        console.log(elementCommon);
+                        if (parseInt(value.responsible) === userId) {
+                            console.log('getTask');
+                            getTask(changeButtonsForMyList(elementCommon));
+                        } else if(task.responsible) {
+                            console.log('Remove Task');
+                            taskList.removeChild(elementCommon);
+                        }
+                    }
+                    if (elementMy) {
+                        console.log('in my list');
+                        if (parseInt(task.responsible) === userId) {
+                            const taskBlock = createTask(value.id, value.typeDoctor, value.userData, value.priority, value.comment);
+                            taskList.appendChild(taskBlock);
+                            myTasks.removeChild(elementMy);
+                        } else {
+    
+                        }
+                    }
                 }
-                
             }
         });
     });
