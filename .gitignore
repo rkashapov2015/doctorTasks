@@ -3,3 +3,4 @@ node_modules
 dist/css/
 dist/js/
 src/bootstrap
+nbproject/

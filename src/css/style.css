@@ -58,7 +58,7 @@
 
 .prof-pediatr .doctor-task-wrapper:after, .prof-terapevt .doctor-task-wrapper:after {
   position: absolute;
-  right: 0;
+  right: 40px;
   bottom: -30px;
   font-family: FontAwesome;
   font-size: 120px;
